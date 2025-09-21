@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FreightGuard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Inconsolata:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg-primary: linear-gradient(145deg, #1a2a44 0%, #2c3e50 100%);
+        --bg-card: rgba(34, 47, 62, 0.92);
+        --accent-navy: #34495e;
+        --accent-orange: #e67e22;
+        --text-primary: #ecf0f1;
+        --text-secondary: #bdc3c7;
+        --border-primary: rgba(52, 73, 94, 0.25);
+        --shadow-sm: 0 4px 12px rgba(52, 73, 94, 0.2);
+        --shadow-md: 0 8px 24px rgba(52, 73, 94, 0.3);
+        --gradient-navy: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+        --gradient-orange: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      body {
+        min-height: 100vh;
+        font-family:
+          "Open Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+      }
+      .header {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        background: rgba(34, 47, 62, 0.95);
+        padding: 0.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: var(--shadow-sm);
+        z-index: 1000;
+        border-bottom: 1px solid var(--border-primary);
+      }
+      .header .logo-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--accent-navy);
+        background: var(--gradient-orange);
+        padding: 0.5rem 1rem;
+        border-radius: 0 20px 0 20px;
+      }
+      .header .logo-wrapper svg {
+        filter: drop-shadow(0 0 6px var(--accent-orange));
+      }
+      .header button {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.9rem 1.8rem;
+        background: var(--gradient-navy);
+        border: none;
+        border-radius: 25px;
+        color: var(--text-primary);
+        font-family: "Inconsolata", monospace;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+      }
+      .header button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 16px var(--accent-orange);
+        background: var(--gradient-orange);
+      }
+      .header button:focus {
+        outline: 2px solid var(--accent-navy);
+        outline-offset: 2px;
+      }
+      .header button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .header button img {
+        width: 20px;
+        height: 20px;
+        filter: drop-shadow(0 0 4px var(--accent-orange));
+      }
+      .content {
+        flex: 1;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+      }
+      .hero {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .hero h1 {
+        font-size: clamp(2rem, 4vw, 2.8rem);
+        font-weight: 700;
+        color: var(--accent-navy);
+        text-shadow: 0 0 8px var(--accent-navy);
+        margin-bottom: 0.5rem;
+        animation: pulse 3s ease-in-out infinite;
+      }
+      .hero p {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        font-family: "Inconsolata", monospace;
+      }
+      .hero .subtitle {
+        font-size: 0.85rem;
+        color: var(--accent-orange);
+        font-family: "Inconsolata", monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        text-shadow: 0 0 4px var(--accent-orange);
+      }
+      .accordion {
+        width: 100%;
+        max-width: 700px;
+      }
+      .accordion-item {
+        margin-bottom: 1.2rem;
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--bg-card);
+        transition: transform 0.3s ease;
+      }
+      .accordion-item:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+      }
+      .accordion-header {
+        padding: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        background: var(--gradient-navy);
+        transition: all 0.3s ease;
+      }
+      .accordion-header:hover {
+        background: var(--gradient-orange);
+      }
+      .accordion-header i {
+        font-size: 1.1rem;
+        color: var(--accent-orange);
+      }
+      .accordion-content {
+        display: none;
+        padding: 1.5rem;
+        background: var(--bg-card);
+      }
+      .accordion-content.active {
+        display: block;
+      }
+      .note {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: rgba(52, 73, 94, 0.05);
+        border: 1px solid var(--border-primary);
+        border-radius: 8px;
+        font-family: "Inconsolata", monospace;
+      }
+      .inputs {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+        margin-bottom: 1.5rem;
+      }
+      .input-wrapper {
+        width: 100%;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-family: "Inconsolata", monospace;
+      }
+      input[type="number"],
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 0.9rem 1.2rem;
+        background: rgba(34, 47, 62, 0.8);
+        border: 1px solid var(--border-primary);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        font-family: "Inconsolata", monospace;
+        transition: all 0.3s ease;
+      }
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent-navy);
+        box-shadow: 0 0 10px var(--accent-navy);
+        background: rgba(34, 47, 62, 1);
+      }
+      input:disabled,
+      select:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.9rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+      .btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 0 12px var(--accent-navy);
+      }
+      .btn:focus {
+        outline: 2px solid var(--accent-orange);
+        outline-offset: 2px;
+      }
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .btn-primary {
+        background: var(--gradient-navy);
+        color: var(--text-primary);
+      }
+      .btn-success {
+        background: var(--gradient-orange);
+        color: var(--text-primary);
+      }
+      .btn i {
+        font-size: 1.1rem;
+      }
+      .status {
+        width: 100%;
+        max-width: 700px;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      #status,
+      #result,
+      #shipmentResult {
+        padding: 1.5rem 2rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-primary);
+        border-radius: 8px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        text-align: center;
+        font-family: "Inconsolata", monospace;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+      }
+      .loading::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: var(--accent-navy);
+        border-radius: 50%;
+        margin-left: 10px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .encrypt-animation {
+        position: relative;
+        overflow: hidden;
+      }
+      .encrypt-animation::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(52, 73, 94, 0.3) 20%,
+          rgba(52, 73, 94, 0.5) 50%,
+          rgba(52, 73, 94, 0.3) 80%,
+          transparent 100%
+        );
+        animation: scan 2s ease-in-out infinite;
+        border-radius: 8px;
+      }
+      @keyframes scan {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+      .success-flash {
+        animation: flash 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      @keyframes flash {
+        0%,
+        100% {
+          box-shadow: var(--shadow-sm);
+          border-color: var(--border-primary);
+        }
+        50% {
+          box-shadow: 0 0 16px var(--accent-orange);
+          border-color: var(--accent-navy);
+        }
+      }
+      @keyframes pulse {
+        0% {
+          text-shadow: 0 0 8px var(--accent-navy);
+        }
+        50% {
+          text-shadow: 0 0 16px var(--accent-navy);
+        }
+        100% {
+          text-shadow: 0 0 8px var(--accent-navy);
+        }
+      }
+      @media (max-width: 768px) {
+        .header {
+          flex-direction: column;
+          gap: 1rem;
+          padding: 1rem;
+        }
+        .content {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo-wrapper">
+        <svg width="100" height="40" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="40" fill="#1a2a44" />
+          <text
+            x="50"
+            y="25"
+            font-family="Open Sans, sans-serif"
+            font-size="16"
+            fill="#ecf0f1"
+            text-anchor="middle"
+            dominant-baseline="middle"
+          >
+            ZAMA
+          </text>
+        </svg>
+        <span>FreightGuard</span>
+      </div>
+      <button id="connect" title="Connect MetaMask">
+        <img
+          src="https://raw.githubusercontent.com/MetaMask/metamask-extension/master/app/images/logo/metamask-fox.svg"
+          alt="MetaMask"
+        />
+        <span>Connect</span>
+      </button>
+    </header>
+    <div class="content">
+      <section class="hero">
+        <h1><i class="fa-solid fa-truck"></i> FreightGuard</h1>
+        <p>Encrypted freight management with blockchain security</p>
+        <div class="subtitle">Secure Logistics • Zama FHE Powered</div>
+      </section>
+      <section class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <i class="fa-solid fa-box"></i> Create Shipment
+          </div>
+          <div class="accordion-content">
+            <div class="note">Initiate a secure shipment with ID, carrier, and consignee details.</div>
+            <div class="inputs">
+              <div class="input-wrapper">
+                <label for="shipmentId">Shipment ID</label>
+                <input type="number" id="shipmentId" placeholder="1" disabled />
+              </div>
+              <div class="input-wrapper">
+                <label for="carrier">Carrier Address</label>
+                <input type="text" id="carrier" placeholder="0x..." disabled />
+              </div>
+              <div class="input-wrapper">
+                <label for="consignee">Consignee Address</label>
+                <input type="text" id="consignee" placeholder="0x..." disabled />
+              </div>
+              <button id="createShipment" class="btn btn-primary" disabled>
+                <i class="fa-solid fa-plus"></i> Create Shipment
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <i class="fa-solid fa-lock"></i> Ingest Encrypted Metadata
+          </div>
+          <div class="accordion-content">
+            <div class="note">Upload encrypted cargo, route, and deadline details securely.</div>
+            <div class="inputs">
+              <div class="input-wrapper">
+                <label for="metaShipmentId">Shipment ID</label>
+                <input type="number" id="metaShipmentId" placeholder="1" disabled />
+              </div>
+              <div class="input-wrapper">
+                <label for="cargoTag">Cargo Tag</label>
+                <input type="text" id="cargoTag" placeholder="12345" disabled />
+              </div>
+              <div class="input-wrapper">
+                <label for="routeTag">Route Tag</label>
+                <input type="text" id="routeTag" placeholder="67890" disabled />
+              </div>
+              <div class="input-wrapper">
+                <label for="deadlineTs">Deadline (Unix Timestamp)</label>
+                <input type="number" id="deadlineTs" placeholder="1697059200" disabled />
+              </div>
+              <button id="ingestMeta" class="btn btn-primary" disabled>
+                <i class="fa-solid fa-upload"></i> Ingest Metadata
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <i class="fa-solid fa-check-circle"></i> Mark Delivery
+          </div>
+          <div class="accordion-content">
+            <div class="note">Confirm delivery and evaluate SLA compliance securely.</div>
+            <div class="inputs">
+              <div class="input-wrapper">
+                <label for="deliveryShipmentId">Shipment ID</label>
+                <input type="number" id="deliveryShipmentId" placeholder="1" disabled />
+              </div>
+              <button id="markDelivered" class="btn btn-success" disabled>
+                <i class="fa-solid fa-truck-fast"></i> Mark Delivered
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <i class="fa-solid fa-user-shield"></i> Grant Viewer
+          </div>
+          <div class="accordion-content">
+            <div class="note">Authorize access to encrypted shipment data for a viewer.</div>
+            <div class="inputs">
+              <div class="input-wrapper">
+                <label for="viewerShipmentId">Shipment ID</label>
+                <input type="number" id="viewerShipmentId" placeholder="1" disabled />
+              </div>
+              <div class="input-wrapper">
+                <label for="viewerAddress">Viewer Address</label>
+                <input type="text" id="viewerAddress" placeholder="0x..." disabled />
+              </div>
+              <button id="grantViewer" class="btn btn-primary" disabled>
+                <i class="fa-solid fa-eye"></i> Grant Viewer
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <i class="fa-solid fa-file-alt"></i> View Shipment Details
+          </div>
+          <div class="accordion-content">
+            <div class="note">Retrieve and decrypt shipment information securely.</div>
+            <div class="inputs">
+              <div class="input-wrapper">
+                <label for="viewShipmentId">Shipment ID</label>
+                <input type="number" id="viewShipmentId" placeholder="1" disabled />
+              </div>
+              <button id="viewDetails" class="btn btn-primary" disabled>
+                <i class="fa-solid fa-search"></i> View Details
+              </button>
+            </div>
+            <div id="shipmentResult" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+      <section class="status">
+        <div id="status" aria-live="polite">Waiting for MetaMask connection...</div>
+        <div id="result" aria-live="polite"></div>
+      </section>
+    </div>
+    <script>
+      function toggleAccordion(header) {
+        const content = header.nextElementSibling;
+        const isActive = content.classList.contains("active");
+        const allContents = document.querySelectorAll(".accordion-content");
+        allContents.forEach((c) => c.classList.remove("active"));
+        if (!isActive) {
+          content.classList.add("active");
+        }
+      }
+    </script>
+    <script type="module" crossorigin src="https://cdn.zama.ai/relayer-sdk-js/0.2.0/relayer-sdk-js.js"></script>
+    <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/ethers@6.15.0/+esm"></script>
+    <script type="module">
+      import { BrowserProvider, Contract, hexlify, isAddress } from "https://cdn.jsdelivr.net/npm/ethers@6.15.0/+esm";
+      import {
+        initSDK,
+        createInstance,
+        SepoliaConfig,
+      } from "https://cdn.zama.ai/relayer-sdk-js/0.2.0/relayer-sdk-js.js";
+
+      const $ = (id) => document.getElementById(id);
+      const [
+        connectBtn,
+        shipmentIdInput,
+        carrierInput,
+        consigneeInput,
+        createShipmentBtn,
+        metaShipmentIdInput,
+        cargoTagInput,
+        routeTagInput,
+        deadlineTsInput,
+        ingestMetaBtn,
+        deliveryShipmentIdInput,
+        markDeliveredBtn,
+        viewerShipmentIdInput,
+        viewerAddressInput,
+        grantViewerBtn,
+        viewShipmentIdInput,
+        viewDetailsBtn,
+        status,
+        result,
+        shipmentResult,
+      ] = [
+        "connect",
+        "shipmentId",
+        "carrier",
+        "consignee",
+        "createShipment",
+        "metaShipmentId",
+        "cargoTag",
+        "routeTag",
+        "deadlineTs",
+        "ingestMeta",
+        "deliveryShipmentId",
+        "markDelivered",
+        "viewerShipmentId",
+        "viewerAddress",
+        "grantViewer",
+        "viewShipmentId",
+        "viewDetails",
+        "status",
+        "result",
+        "shipmentResult",
+      ].map($);
+
+      const CONTRACT_ADDRESS = "0xbB4928559E6ce8f4607AB17845D4e35DA7b52440";
+      const RELAYER_URL = "https://relayer.testnet.zama.cloud";
+      const KMS_ADDRESS = "0x1364cBBf2cDF5032C47d8226a6f6FBD2AFCDacAC";
+      const privateLogisticsSLAAbi = [
+        {
+          inputs: [
+            { name: "shipmentId", type: "uint256" },
+            { name: "carrier", type: "address" },
+            { name: "consignee", type: "address" },
+          ],
+          name: "createShipment",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            { name: "shipmentId", type: "uint256" },
+            { name: "cargoTagExtRaw", type: "bytes32" },
+            { name: "cargoProof", type: "bytes" },
+            { name: "routeTagExtRaw", type: "bytes32" },
+            { name: "routeProof", type: "bytes" },
+            { name: "deadlineTsExtRaw", type: "bytes32" },
+            { name: "deadlineProof", type: "bytes" },
+          ],
+          name: "ingestEncryptedMeta",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [{ name: "shipmentId", type: "uint256" }],
+          name: "markDelivered",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            { name: "shipmentId", type: "uint256" },
+            { name: "viewer", type: "address" },
+          ],
+          name: "grantViewer",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [{ name: "shipmentId", type: "uint256" }],
+          name: "getParticipants",
+          outputs: [
+            { name: "shipper", type: "address" },
+            { name: "carrier", type: "address" },
+            { name: "consignee", type: "address" },
+            { name: "delivered", type: "bool" },
+            { name: "haveMeta", type: "bool" },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [{ name: "shipmentId", type: "uint256" }],
+          name: "getEncryptedMetaHandles",
+          outputs: [
+            { name: "cargoTagH", type: "bytes32" },
+            { name: "routeTagH", type: "bytes32" },
+            { name: "deadlineTsH", type: "bytes32" },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [{ name: "shipmentId", type: "uint256" }],
+          name: "getResultHandles",
+          outputs: [
+            { name: "delivered", type: "bool" },
+            { name: "deliveredAtH", type: "bytes32" },
+            { name: "slaOkH", type: "bytes32" },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "version",
+          outputs: [{ name: "", type: "string" }],
+          stateMutability: "pure",
+          type: "function",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            { indexed: true, name: "shipmentId", type: "uint256" },
+            { indexed: true, name: "shipper", type: "address" },
+            { indexed: true, name: "carrier", type: "address" },
+            { indexed: false, name: "consignee", type: "address" },
+          ],
+          name: "ShipmentCreated",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            { indexed: true, name: "shipmentId", type: "uint256" },
+            { indexed: false, name: "cargoTagHandle", type: "bytes32" },
+            { indexed: false, name: "routeTagHandle", type: "bytes32" },
+            { indexed: false, name: "deadlineHandle", type: "bytes32" },
+          ],
+          name: "MetaIngested",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            { indexed: true, name: "shipmentId", type: "uint256" },
+            { indexed: false, name: "deliveredAtHandle", type: "bytes32" },
+            { indexed: false, name: "slaOkHandle", type: "bytes32" },
+          ],
+          name: "DeliveryMarked",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            { indexed: true, name: "shipmentId", type: "uint256" },
+            { indexed: true, name: "viewer", type: "address" },
+          ],
+          name: "ViewerGranted",
+          type: "event",
+        },
+      ];
+
+      let provider, signer, user, relayer, contract;
+      let step = 0;
+      let userDecKeys = null;
+      const CONTRACTS = [CONTRACT_ADDRESS];
+      const VALID_DAYS = "7";
+
+      function log(msg) {
+        console.log(`[${++step}] ${msg}`);
+      }
+
+      const J = (v) => JSON.stringify(v, (_, x) => (typeof x === "bigint" ? x.toString() : x));
+
+      function addLoadingAnimation(btn) {
+        btn.classList.add("loading");
+      }
+
+      function removeLoadingAnimation(btn) {
+        btn.classList.remove("loading");
+      }
+
+      function addEncryptionAnimation(element) {
+        element.classList.add("encrypt-animation");
+        setTimeout(() => element.classList.remove("encrypt-animation"), 3000);
+      }
+
+      function addSuccessFlash(element) {
+        element.classList.add("success-flash");
+        setTimeout(() => element.classList.remove("success-flash"), 500);
+      }
+
+      function ensureKeys() {
+        if (!userDecKeys) {
+          userDecKeys = relayer.generateKeypair();
+          log(
+            `Generated keypair: publicKey=${userDecKeys.publicKey}, privateKey=${userDecKeys.privateKey.substring(0, 10)}...`,
+          );
+        }
+        return userDecKeys;
+      }
+
+      async function userDecryptOne(handle) {
+        try {
+          const { publicKey, privateKey } = ensureKeys();
+          const signerAddress = await signer.getAddress();
+          const start = Math.floor(Date.now() / 1000).toString();
+          log(`Creating EIP-712 for publicKey=${publicKey}, start=${start}, contracts=${CONTRACTS}`);
+          const eip712 = relayer.createEIP712(publicKey, CONTRACTS, start, VALID_DAYS);
+          log(`Signing EIP-712 with signer=${signerAddress}`);
+          const signature = await signer.signTypedData(
+            eip712.domain,
+            { UserDecryptRequestVerification: eip712.types.UserDecryptRequestVerification },
+            eip712.message,
+          );
+          log(`Signature generated: ${signature}`);
+          log(`Calling userDecrypt with handle=${handle}, contractAddress=${CONTRACT_ADDRESS}`);
+          const out = await relayer.userDecrypt(
+            [{ handle, contractAddress: CONTRACT_ADDRESS }],
+            privateKey,
+            publicKey,
+            signature,
+            CONTRACTS,
+            signerAddress,
+            start,
+            VALID_DAYS,
+          );
+          log(`userDecrypt output: ${J(out)}`);
+          const key = Object.keys(out).find((k) => k.toLowerCase() === handle.toLowerCase());
+          if (!key) throw new Error("Handle not found in userDecrypt output");
+          return out[key];
+        } catch (e) {
+          log(`userDecryptOne error: ${e.message}`);
+          throw e;
+        }
+      }
+
+      async function updateStatus() {
+        if (!contract) return;
+        try {
+          const version = await contract.version();
+          result.textContent = `Contract Version: ${version}`;
+        } catch (e) {
+          log(`Status update error: ${e.message}`);
+        }
+      }
+
+      window.addEventListener("load", () => {
+        log("Page loaded, attaching handler to MetaMask button");
+        connectBtn.onclick = connectMetaMask;
+      });
+
+      async function connectMetaMask() {
+        addLoadingAnimation(connectBtn);
+        log("Checking window.ethereum...");
+        if (!window.ethereum || typeof window.ethereum.request !== "function") {
+          status.textContent = "❌ MetaMask is not installed or does not support EIP-1193";
+          log("MetaMask not found or does not support EIP-1193");
+          removeLoadingAnimation(connectBtn);
+          return false;
+        }
+        try {
+          provider = new BrowserProvider(window.ethereum);
+          await provider.send("eth_requestAccounts", []);
+          signer = await provider.getSigner();
+          user = await signer.getAddress();
+          let network = await provider.getNetwork();
+          if (network.chainId !== BigInt(11155111)) {
+            status.textContent = "⏳ Switching to Sepolia network...";
+            log(`Incorrect network: ${network.chainId}. Requesting Sepolia (11155111)`);
+            try {
+              await provider.send("wallet_switchEthereumChain", [{ chainId: "0xaa36a7" }]);
+              network = await provider.getNetwork();
+            } catch (switchError) {
+              if (switchError.code === 4902) {
+                try {
+                  await provider.send("wallet_addEthereumChain", [
+                    {
+                      chainId: "0xaa36a7",
+                      chainName: "Sepolia",
+                      nativeCurrency: { name: "Sepolia Ether", symbol: "ETH", decimals: 18 },
+                      rpcUrls: ["https://rpc.sepolia.org"],
+                      blockExplorerUrls: ["https://sepolia.etherscan.io"],
+                    },
+                  ]);
+                  network = await provider.getNetwork();
+                } catch (addError) {
+                  status.textContent = "❌ Unable to add Sepolia network";
+                  log(`Add network error: ${addError.message}`);
+                  removeLoadingAnimation(connectBtn);
+                  return false;
+                }
+              } else {
+                status.textContent = "❌ Please switch to Sepolia network";
+                log(`Network switch error: ${switchError.message}`);
+                removeLoadingAnimation(connectBtn);
+                return false;
+              }
+            }
+            if (network.chainId !== BigInt(11155111)) {
+              status.textContent = "❌ Please switch to Sepolia network";
+              log(`Failed to switch network: ${network.chainId}`);
+              removeLoadingAnimation(connectBtn);
+              return false;
+            }
+          }
+          status.textContent = `✅ Connected: ${user.slice(0, 6)}...${user.slice(-4)}`;
+          log(`Connected account: ${user}`);
+          connectBtn.innerHTML = `<img src="https://raw.githubusercontent.com/MetaMask/metamask-extension/master/app/images/logo/metamask-fox.svg" alt="MetaMask"><span>${user.slice(0, 6)}...${user.slice(-4)}</span>`;
+          connectBtn.disabled = true;
+          shipmentIdInput.disabled = false;
+          carrierInput.disabled = false;
+          consigneeInput.disabled = false;
+          createShipmentBtn.disabled = false;
+          metaShipmentIdInput.disabled = false;
+          cargoTagInput.disabled = false;
+          routeTagInput.disabled = false;
+          deadlineTsInput.disabled = false;
+          ingestMetaBtn.disabled = false;
+          deliveryShipmentIdInput.disabled = false;
+          markDeliveredBtn.disabled = false;
+          viewerShipmentIdInput.disabled = false;
+          viewerAddressInput.disabled = false;
+          grantViewerBtn.disabled = false;
+          viewShipmentIdInput.disabled = false;
+          viewDetailsBtn.disabled = false;
+          addSuccessFlash(status);
+          log("Initializing Relayer SDK...");
+          await initSDK();
+          log("Relayer SDK initialized");
+          const relayerConfig = {
+            ...SepoliaConfig,
+            network: window.ethereum,
+            relayerUrl: RELAYER_URL,
+            debug: true,
+          };
+          log("Creating relayer...");
+          relayer = await createInstance(relayerConfig);
+          log("Relayer ready");
+          log("Creating contract instance...");
+          contract = new Contract(CONTRACT_ADDRESS, privateLogisticsSLAAbi, signer);
+          log(`Contract initialized: ${CONTRACT_ADDRESS}`);
+          await updateStatus();
+          removeLoadingAnimation(connectBtn);
+          return true;
+        } catch (e) {
+          status.textContent = `❌ Connection error: ${e.message}`;
+          log(`Connection error: ${e.message}`);
+          removeLoadingAnimation(connectBtn);
+          return false;
+        }
+      }
+
+      createShipmentBtn.onclick = async () => {
+        if (!contract) {
+          status.textContent = "❌ Connect MetaMask first";
+          log("MetaMask not connected");
+          return;
+        }
+        const shipmentId = parseInt(shipmentIdInput.value);
+        const carrier = carrierInput.value;
+        const consignee = consigneeInput.value;
+        if (isNaN(shipmentId) || shipmentId < 0) {
+          status.textContent = "❌ Invalid shipment ID";
+          log(`Invalid shipment ID: ${shipmentId}`);
+          return;
+        }
+        if (!isAddress(carrier) || !isAddress(consignee)) {
+          status.textContent = "❌ Invalid address";
+          log(`Invalid carrier: ${carrier}, consignee: ${consignee}`);
+          return;
+        }
+        createShipmentBtn.disabled = true;
+        addLoadingAnimation(createShipmentBtn);
+        status.textContent = "⏳ Creating shipment...";
+        try {
+          const tx = await contract.createShipment(shipmentId, carrier, consignee);
+          log(`createShipment tx: ${tx.hash}`);
+          await tx.wait();
+          status.textContent = "✅ Shipment created";
+          result.textContent = `🎉 Shipment ${shipmentId} created (tx: ${tx.hash})`;
+          addSuccessFlash(result);
+          shipmentIdInput.value = "";
+          carrierInput.value = "";
+          consigneeInput.value = "";
+        } catch (e) {
+          status.textContent = `❌ Error: ${e.message}`;
+          log(`Create shipment error: ${e.message}`);
+        } finally {
+          createShipmentBtn.disabled = false;
+          removeLoadingAnimation(createShipmentBtn);
+          await updateStatus();
+        }
+      };
+
+      ingestMetaBtn.onclick = async () => {
+        if (!relayer || !contract) {
+          status.textContent = "❌ Connect MetaMask first";
+          log("MetaMask not connected");
+          return;
+        }
+        const shipmentId = parseInt(metaShipmentIdInput.value);
+        let cargoTag, routeTag, deadlineTs;
+        try {
+          cargoTag = BigInt(cargoTagInput.value);
+          routeTag = BigInt(routeTagInput.value);
+          deadlineTs = BigInt(deadlineTsInput.value);
+        } catch (e) {
+          status.textContent = "❌ Invalid input values";
+          log(`Invalid input: ${e.message}`);
+          return;
+        }
+        if (isNaN(shipmentId) || shipmentId < 0) {
+          status.textContent = "❌ Invalid shipment ID";
+          log(`Invalid shipment ID: ${shipmentId}`);
+          return;
+        }
+        ingestMetaBtn.disabled = true;
+        addLoadingAnimation(ingestMetaBtn);
+        addEncryptionAnimation(cargoTagInput);
+        addEncryptionAnimation(routeTagInput);
+        addEncryptionAnimation(deadlineTsInput);
+        status.textContent = "⏳ Ingesting encrypted metadata...";
+        try {
+          const buf = relayer.createEncryptedInput(CONTRACT_ADDRESS, user);
+          buf.add256(cargoTag);
+          buf.add256(routeTag);
+          buf.add64(deadlineTs);
+          const { handles, inputProof } = await buf.encrypt();
+          log(`Encrypted handles: ${handles.map((h) => (typeof h === "string" ? h : hexlify(h))).join(", ")}`);
+          const tx = await contract.ingestEncryptedMeta(
+            shipmentId,
+            handles[0],
+            inputProof,
+            handles[1],
+            inputProof,
+            handles[2],
+            inputProof,
+          );
+          log(`ingestEncryptedMeta tx: ${tx.hash}`);
+          await tx.wait();
+          status.textContent = "✅ Metadata ingested";
+          result.textContent = `🎉 Metadata for shipment ${shipmentId} ingested (tx: ${tx.hash})`;
+          addSuccessFlash(result);
+          metaShipmentIdInput.value = "";
+          cargoTagInput.value = "";
+          routeTagInput.value = "";
+          deadlineTsInput.value = "";
+        } catch (e) {
+          status.textContent = `❌ Error: ${e.message}`;
+          log(`Ingest metadata error: ${e.message}`);
+        } finally {
+          ingestMetaBtn.disabled = false;
+          removeLoadingAnimation(ingestMetaBtn);
+          await updateStatus();
+        }
+      };
+
+      markDeliveredBtn.onclick = async () => {
+        if (!contract) {
+          status.textContent = "❌ Connect MetaMask first";
+          log("MetaMask not connected");
+          return;
+        }
+        const shipmentId = parseInt(deliveryShipmentIdInput.value);
+        if (isNaN(shipmentId) || shipmentId < 0) {
+          status.textContent = "❌ Invalid shipment ID";
+          log(`Invalid shipment ID: ${shipmentId}`);
+          return;
+        }
+        markDeliveredBtn.disabled = true;
+        addLoadingAnimation(markDeliveredBtn);
+        status.textContent = "⏳ Marking delivery...";
+        try {
+          const tx = await contract.markDelivered(shipmentId);
+          log(`markDelivered tx: ${tx.hash}`);
+          await tx.wait();
+          status.textContent = "✅ Delivery marked";
+          result.textContent = `🎉 Shipment ${shipmentId} marked as delivered (tx: ${tx.hash})`;
+          addSuccessFlash(result);
+          deliveryShipmentIdInput.value = "";
+        } catch (e) {
+          status.textContent = `❌ Error: ${e.message}`;
+          log(`Mark delivered error: ${e.message}`);
+        } finally {
+          markDeliveredBtn.disabled = false;
+          removeLoadingAnimation(markDeliveredBtn);
+          await updateStatus();
+        }
+      };
+
+      grantViewerBtn.onclick = async () => {
+        if (!contract) {
+          status.textContent = "❌ Connect MetaMask first";
+          log("MetaMask not connected");
+          return;
+        }
+        const shipmentId = parseInt(viewerShipmentIdInput.value);
+        const viewer = viewerAddressInput.value;
+        if (isNaN(shipmentId) || shipmentId < 0) {
+          status.textContent = "❌ Invalid shipment ID";
+          log(`Invalid shipment ID: ${shipmentId}`);
+          return;
+        }
+        if (!isAddress(viewer)) {
+          status.textContent = "❌ Invalid viewer address";
+          log(`Invalid viewer address: ${viewer}`);
+          return;
+        }
+        grantViewerBtn.disabled = true;
+        addLoadingAnimation(grantViewerBtn);
+        status.textContent = "⏳ Granting viewer access...";
+        try {
+          const tx = await contract.grantViewer(shipmentId, viewer);
+          log(`grantViewer tx: ${tx.hash}`);
+          await tx.wait();
+          status.textContent = "✅ Viewer granted";
+          result.textContent = `🎉 Viewer ${viewer.slice(0, 6)}...${viewer.slice(-4)} granted for shipment ${shipmentId} (tx: ${tx.hash})`;
+          addSuccessFlash(result);
+          viewerShipmentIdInput.value = "";
+          viewerAddressInput.value = "";
+        } catch (e) {
+          status.textContent = `❌ Error: ${e.message}`;
+          log(`Grant viewer error: ${e.message}`);
+        } finally {
+          grantViewerBtn.disabled = false;
+          removeLoadingAnimation(grantViewerBtn);
+          await updateStatus();
+        }
+      };
+
+      viewDetailsBtn.onclick = async () => {
+        if (!relayer || !contract) {
+          status.textContent = "❌ Connect MetaMask first";
+          log("MetaMask not connected");
+          return;
+        }
+        const shipmentId = parseInt(viewShipmentIdInput.value);
+        if (isNaN(shipmentId) || shipmentId < 0) {
+          status.textContent = "❌ Invalid shipment ID";
+          log(`Invalid shipment ID: ${shipmentId}`);
+          return;
+        }
+        viewDetailsBtn.disabled = true;
+        addLoadingAnimation(viewDetailsBtn);
+        status.textContent = "⏳ Fetching shipment details...";
+        try {
+          const [shipper, carrier, consignee, delivered, haveMeta] = await contract.getParticipants(shipmentId);
+          let details = `Shipment ${shipmentId}:\nShipper: ${shipper.slice(0, 6)}...${shipper.slice(-4)}\nCarrier: ${carrier.slice(0, 6)}...${carrier.slice(-4)}\nConsignee: ${consignee.slice(0, 6)}...${consignee.slice(-4)}\nMetadata Ingested: ${haveMeta}\nDelivered: ${delivered}`;
+
+          if (haveMeta) {
+            const [cargoTagH, routeTagH, deadlineTsH] = await contract.getEncryptedMetaHandles(shipmentId);
+            try {
+              const cargoTag = await userDecryptOne(cargoTagH);
+              const routeTag = await userDecryptOne(routeTagH);
+              const deadlineTs = await userDecryptOne(deadlineTsH);
+              details += `\nCargo Tag: ${cargoTag.toString()}\nRoute Tag: ${routeTag.toString()}\nDeadline: ${new Date(Number(deadlineTs) * 1000).toLocaleString()}`;
+            } catch (e) {
+              details += `\nMetadata: [Encrypted, decryption failed: ${e.message}]`;
+            }
+          }
+
+          if (delivered) {
+            const [deliveredFlag, deliveredAtH, slaOkH] = await contract.getResultHandles(shipmentId);
+            try {
+              const deliveredAt = await userDecryptOne(deliveredAtH);
+              const slaOk = await userDecryptOne(slaOkH);
+              details += `\nDelivered At: ${new Date(Number(deliveredAt) * 1000).toLocaleString()}\nSLA Met: ${Number(slaOk) ? "Yes" : "No"}`;
+            } catch (e) {
+              details += `\nDelivery Details: [Encrypted, decryption failed: ${e.message}]`;
+            }
+          }
+
+          shipmentResult.textContent = details;
+          status.textContent = "✅ Details fetched";
+          addSuccessFlash(shipmentResult);
+          viewShipmentIdInput.value = "";
+        } catch (e) {
+          status.textContent = `❌ Error: ${e.message}`;
+          log(`View details error: ${e.message}`);
+        } finally {
+          viewDetailsBtn.disabled = false;
+          removeLoadingAnimation(viewDetailsBtn);
+          await updateStatus();
+        }
+      };
+    </script>
+  </body>
+</html>
